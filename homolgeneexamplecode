@@ -1,0 +1,30 @@
+
+##example Homologene file and its location
+homologeneFile<-system.file('extdata','homologene_part.data',package='annotationTools')
+
+##load Homologene file
+homologene<-read.delim(homologeneFile,header=FALSE)
+
+##get mouse (species ID 10090) orthologs of several human (species ID 9606) gene ID (among those: 5982, gene symbol RFC2 and 93587, gene symbol: RG9MTD2)
+myGenes<-c(5982,93587,NA,100)
+getHOMOLOG(myGenes,10090,homologene)
+
+##track origin of annotation failure for the last 2 gene IDs
+getHOMOLOG(myGenes,10090,homologene,diagnose=TRUE)
+
+##get mouse gene belonging to homologene cluster IDs 6885 and 6886
+myClusters<-c(6885,6886)
+getHOMOLOG(myClusters,10090,homologene,cluster=TRUE)
+
+##get mouse orthologs of human genes using 'gene_group'
+gene_groupFile<-system.file('extdata','gene_group_part.data',package='annotationTools')
+gene_group<-read.delim(gene_groupFile,header=TRUE)
+getHOMOLOG(myGenes,10090,gene_group,tableType='gene_group')
+
+##mine Affymetrix (example) ortholog file
+affyOrthologFile<-system.file('extdata','HG-U133_Plus_2_ortholog_part.csv',package='annotationTools')
+affyOrthologs<-read.csv(affyOrthologFile,colClasses='character')
+
+##get Mouse430_2 probe set IDs 'orthologous' to HG-U133_Plus_2 probe set IDs 1053_at and 121_at
+myPS<-c('1053_at','121_at')
+getHOMOLOG(myPS,'Mouse430_2',affyOrthologs,cluster=TRUE,clusterCol=1,speciesCol=4,idCol=3)
